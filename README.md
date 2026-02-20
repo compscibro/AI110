@@ -1,1 +1,1 @@
-# AI 110: Applied AI Engineering
+# AI 110: Foundations of AI Engineering
