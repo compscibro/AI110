@@ -1,0 +1,16 @@
+Verification != It runs
+    1. Reading the logic
+    2. Tracing how data flows
+    3. Checking assumptions
+    4. Testing edge cases
+
+Specs driven development
+    1. Clear intent -> better output
+    2. Vague intent -> fragile code
+
+Prompt vs. Spec
+    Prompt is an instruction:
+        - short-lived, context dependent, conversational, and optimized for immediate output.
+    Spec defines what must exist, how it must behave, and what constraints apply:
+        - persistent, structured, testable, model agnostic, deterministic in intent.
+
