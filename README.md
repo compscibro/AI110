@@ -5,11 +5,11 @@
 The Applied AI Engineering pathway teaches computer science, software engineering, and AI-assisted workflows. Students will learn to design applications, integrate AI techniques, and contribute to open-source projects.
 
 **Topics Covered**
-Module 1: AI-Native Programming Foundations
-Module 2: Systems and Algorithms in AI Workflows
-Module 3: Data, Models, and Machine Learning Literacy
-Module 4: Applied AI Systems and Collaboration
-Module 5: Intelligent Systems and Professional Showcase
+- Module 1: AI-Native Programming Foundations
+- Module 2: Systems and Algorithms in AI Workflows
+- Module 3: Data, Models, and Machine Learning Literacy
+- Module 4: Applied AI Systems and Collaboration
+- Module 5: Intelligent Systems and Professional Showcase
 
 **Learning Objectives**
 - [ ] Apply data structures, algorithms, and object-oriented programming within AI-integrated workflows
