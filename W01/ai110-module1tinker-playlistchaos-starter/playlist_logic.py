@@ -73,24 +73,15 @@ def classify_song(song: Song, profile: Dict[str, object]) -> str:
     is_hype_keyword = any(k in genre for k in hype_keywords)
     is_chill_keyword = any(k in title for k in chill_keywords)
 
-    # Step 1: Check energy and genre keywords first — these are objective signals.
-    # Previously, `genre == favorite_genre` was OR'd here, which caused low-energy
-    # songs in the favorite genre to be classified as "Hype" regardless of their
-    # actual energy level. That bypassed the chill_max_energy threshold entirely.
+    # Step 1: Energy and hype genre keywords take priority.
     if energy >= hype_min_energy or is_hype_keyword:
         return "Hype"
 
-    # Step 2: Check for chill signals next — again, energy-based and objective.
-    # This must come before the favorite_genre tiebreaker so that a low-energy
-    # song in the favorite genre correctly lands in "Chill" rather than "Hype".
+    # Step 2: Chill signals checked before favorite_genre tiebreaker.
     if energy <= chill_max_energy or is_chill_keyword:
         return "Chill"
 
-    # Step 3: Only reach here if the song is in the "middle" energy range
-    # (above chill_max_energy but below hype_min_energy). favorite_genre now acts
-    # as a tiebreaker — nudging an otherwise ambiguous song toward "Hype" because
-    # it belongs to a genre the user loves. This respects energy thresholds while
-    # still giving favorite_genre a meaningful role in classification.
+    # Step 3: favorite_genre is a tiebreaker for mid-energy songs only.
     if genre == favorite_genre:
         return "Hype"
 
