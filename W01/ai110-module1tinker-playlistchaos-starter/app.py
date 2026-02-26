@@ -22,6 +22,17 @@ def init_state():
     if "history" not in st.session_state:
         st.session_state.history = []
 
+    # Initialize slider widget keys from the profile defaults on first load.
+    # By setting these keys here (before the sliders render), the sliders use
+    # the key value as their source of truth instead of the `value=` parameter.
+    # This avoids the Streamlit warning: "widget was created with a default value
+    # but also had its value set via the Session State API", which appears when
+    # both `value=` and a pre-existing session state key exist for the same widget.
+    if "hype_min_energy" not in st.session_state:
+        st.session_state["hype_min_energy"] = DEFAULT_PROFILE["hype_min_energy"]
+    if "chill_max_energy" not in st.session_state:
+        st.session_state["chill_max_energy"] = DEFAULT_PROFILE["chill_max_energy"]
+
 
 def default_songs():
     """Return a default list of songs."""
@@ -196,18 +207,23 @@ def profile_sidebar():
 
     col1, col2 = st.sidebar.columns(2)
     with col1:
+        # key="hype_min_energy" links this slider to st.session_state["hype_min_energy"].
+        # `value=` is intentionally omitted — the key is the single source of truth,
+        # initialized in init_state() and updated by the reset callback. Having both
+        # `value=` and a pre-set key causes Streamlit to show a user-facing warning.
         profile["hype_min_energy"] = st.sidebar.slider(
             "Hype min energy",
             min_value=1,
             max_value=10,
-            value=int(profile.get("hype_min_energy", 7)),
+            key="hype_min_energy",
         )
     with col2:
+        # Same reasoning as above — value= omitted, key controls the slider state.
         profile["chill_max_energy"] = st.sidebar.slider(
             "Chill max energy",
             min_value=1,
             max_value=10,
-            value=int(profile.get("chill_max_energy", 3)),
+            key="chill_max_energy",
         )
 
     profile["favorite_genre"] = st.sidebar.selectbox(
@@ -365,11 +381,40 @@ def history_section():
             )
 
 
+def _do_reset():
+    """Callback that runs before the next render when the reset button is clicked.
+
+    Streamlit executes on_click callbacks before re-rendering the page, which
+    means the slider widgets have NOT been instantiated yet when this runs.
+    That is the only safe window to update widget-linked session state keys —
+    Streamlit raises a StreamlitAPIException if you try to set a widget key
+    after the widget has already rendered in the same script run (which is what
+    happened when the reset logic lived inside `if st.sidebar.button(...)` in
+    clear_controls(), since clear_controls() is called after profile_sidebar()).
+    """
+    # Reset songs back to the built-in defaults.
+    st.session_state.songs = default_songs()
+
+    # Reset the full profile so hype_min_energy (7) and chill_max_energy (3)
+    # return to their default values alongside all other profile settings.
+    st.session_state.profile = dict(DEFAULT_PROFILE)
+
+    # Update the widget-linked keys so the sliders visually snap back to their
+    # default positions on the next render. These keys are safe to set here
+    # because the callback fires before the sliders are instantiated.
+    st.session_state["hype_min_energy"] = DEFAULT_PROFILE["hype_min_energy"]
+    st.session_state["chill_max_energy"] = DEFAULT_PROFILE["chill_max_energy"]
+
+
 def clear_controls():
     """Render a small section for clearing data."""
     st.sidebar.header("Manage data")
-    if st.sidebar.button("Reset songs to default"):
-        st.session_state.songs = default_songs()
+
+    # on_click=_do_reset wires the callback so all session state is updated
+    # before the next render, avoiding the "cannot modify after instantiation"
+    # error that occurs when widget keys are set after their widgets render.
+    st.sidebar.button("Reset songs to default", on_click=_do_reset)
+
     if st.sidebar.button("Clear history"):
         st.session_state.history = []
 
