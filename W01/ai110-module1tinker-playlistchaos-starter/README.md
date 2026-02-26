@@ -41,12 +41,12 @@ You will need to look at both files to understand how the app behaves.
 
 Run the app and try things out:
 
-- Add several songs with different titles, artists, genres, and energy levels  
-- Change the mood profile  
-- Use the search box  
-- Try the lucky pick  
-- Inspect the playlist tabs and stats  
-- Look at the history  
+[x] Add several songs with different titles, artists, genres, and energy levels  
+[x] Change the mood profile  
+[x] Use the search box  
+[x] Try the lucky pick  
+[x] Inspect the playlist tabs and stats  
+[x] Look at the history  
 
 As you explore, write down at least five things that feel confusing, inconsistent, or strange. These might be bugs, quirks, or unexpected design decisions.
 
@@ -54,9 +54,9 @@ As you explore, write down at least five things that feel confusing, inconsisten
 
 Pick one issue from your list. Use an AI coding assistant to:
 
-- Explain the relevant code sections  
-- Walk through what the code is supposed to do  
-- Suggest reasons the behavior might not match expectations  
+[x] Explain the relevant code sections  
+[x] Walk through what the code is supposed to do  
+[x] Suggest reasons the behavior might not match expectations  
 
 For example:
 
@@ -70,10 +70,10 @@ Make improvements based on your investigation.
 
 For each fix:
 
-- Identify the source of the issue  
-- Decide whether to accept or adjust the AI assistant's suggestions  
-- Update the code  
-- Add a short comment describing the fix  
+[x] Identify the source of the issue  
+[x] Decide whether to accept or adjust the AI assistant's suggestions  
+[x] Update the code  
+[x] Add a short comment describing the fix  
 
 Your fixes may involve logic, calculations, search behavior, playlist grouping, lucky pick behavior, or anything else you discover.
 
@@ -81,10 +81,10 @@ Your fixes may involve logic, calculations, search behavior, playlist grouping, 
 
 After each fix, try interacting with the app again:
 
-- Add new songs  
-- Change the profile  
-- Try search and stats  
-- Check whether playlists behave more consistently  
+[x] Add new songs  
+[x] Change the profile  
+[x] Try search and stats  
+[x] Check whether playlists behave more consistently  
 
 Confirm that the behavior matches your expectations.
 
@@ -94,8 +94,8 @@ If you finish early or want an extra challenge, try one of these:
 
 - Improve search behavior  
 - Add a "Recently added" view  
-- Add sorting controls  
-- Improve how Mixed songs are handled  
+[x] Add sorting controls  
+[x] Improve how Mixed songs are handled  
 - Add new features to the history view  
 - Introduce better error handling for empty playlists  
 - Add a new playlist category of your own design  
