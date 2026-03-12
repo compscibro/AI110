@@ -45,6 +45,14 @@ class Menu:
     def filter_by_category(self, category):
         return [item for item in self._items if item.get_category() == category]
 
+    def sort_by_price(self, ascending=True):
+        """Return items sorted by price."""
+        return sorted(self._items, key=lambda item: item.get_price(), reverse=not ascending)
+
+    def sort_by_popularity(self):
+        """Return items sorted by popularity rating, highest first."""
+        return sorted(self._items, key=lambda item: item.get_popularity_rating(), reverse=True)
+
     def get_all_items(self):
         return list(self._items)
 
