@@ -12,42 +12,45 @@ Finally, when a user picks items, we need to group them into a single transactio
 
 ## UML Class Diagram
 
-```mermaid
-classDiagram
-    class Customer {
-        +int customer_id
-        +String name
-        +List~Transaction~ purchase_history
-        +verify_customer() bool
-        +add_to_history(transaction: Transaction) None
-    }
+```plantuml
+@startuml
 
-    class FoodItem {
-        +int item_id
-        +String name
-        +float price
-        +String category
-        +float popularity_rating
-    }
+class User {
+    +int customer_id
+    +String name
+    +List~Order~ purchase_history
+    +verify_customer() bool
+    +add_to_history(order: Order) void
+}
 
-    class Menu {
-        +List~FoodItem~ items
-        +add_item(item: FoodItem) None
-        +remove_item(item_id: int) None
-        +filter_by_category(category: String) List~FoodItem~
-    }
+class MenuItem {
+    +int item_id
+    +String name
+    +float price
+    +String category
+    +float popularity_rating
+}
 
-    class Transaction {
-        +int transaction_id
-        +Customer customer
-        +List~FoodItem~ selected_items
-        +add_item(item: FoodItem) None
-        +compute_total() float
-    }
+class Restaurant {
+    +List~MenuItem~ items
+    +add_item(item: MenuItem) void
+    +remove_item(item_id: int) void
+    +filter_by_category(category: String) List~MenuItem~
+}
 
-    Customer "1" o-- "0..*" Transaction : purchase history
-    Transaction "*" --> "1" Customer : belongs to
-    Transaction "1" *-- "1..*" FoodItem : contains
-    Menu "1" o-- "0..*" FoodItem : holds
+class Order {
+    +int transaction_id
+    +User user
+    +List~MenuItem~ selected_items
+    +add_item(item: MenuItem) void
+    +compute_total() float
+}
+
+User "1" o--> "0..*" Order : purchase history
+Order "*" --> "1" User : belongs to
+Order "1" *--> "1..*" MenuItem : contains
+Restaurant "1" o--> "0..*" MenuItem : holds
+
+@enduml
 ```
 
