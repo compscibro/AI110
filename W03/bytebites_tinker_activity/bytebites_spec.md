@@ -15,12 +15,15 @@ Finally, when a user picks items, we need to group them into a single transactio
 ```mermaid
 classDiagram
     class Customer {
+        +int customer_id
         +String name
         +List~Transaction~ purchase_history
         +verify_customer() bool
+        +add_to_history(transaction: Transaction) None
     }
 
     class FoodItem {
+        +int item_id
         +String name
         +float price
         +String category
@@ -29,17 +32,22 @@ classDiagram
 
     class Menu {
         +List~FoodItem~ items
+        +add_item(item: FoodItem) None
+        +remove_item(item_id: int) None
         +filter_by_category(category: String) List~FoodItem~
     }
 
     class Transaction {
-        +List~FoodItem~ selected_items
+        +int transaction_id
         +Customer customer
+        +List~FoodItem~ selected_items
+        +add_item(item: FoodItem) None
         +compute_total() float
     }
 
-    Customer "1" --> "0..*" Transaction : places
-    Transaction "0..*" o-- "1..*" FoodItem : contains
+    Customer "1" o-- "0..*" Transaction : purchase history
+    Transaction "*" --> "1" Customer : belongs to
+    Transaction "1" *-- "1..*" FoodItem : contains
     Menu "1" o-- "0..*" FoodItem : holds
 ```
 
