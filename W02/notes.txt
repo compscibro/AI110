@@ -1,0 +1,41 @@
+For debugging with AI:
+
+- Provide the full context. The three pillars of context are:
+    1. The trace: the full stack trace or error log
+    2. The code: the specific function and any related helper methods it calls
+    3. The data schema: an example of the data entering the function (for example:
+    a sample JSON object or a TypeScript interface). This tells the AI the "shape"
+    of the data, what fields exist, which are optional, and what types they are.
+
+- The logic gap strategy: Instead of asking the AI to "fix the code," ask it to find
+  the flaw in your logic. his is most helpful when you are stuck in a loop and can't 
+  see your own bias.
+    1. The problem: You’ve been staring at the code for thirty minutes. You know it 
+    should work, so you keep overlooking the same mistake.
+    2. The AI's role: It acts as an objective auditor of your assumptions
+    3. The prompt formula: > "I am trying to achieve [Goal]. My logic is 
+    [Step A -> Step B]. However, the result is [Wrong Outcome]. 
+    Tell me which part of my logic is flawed or what edge case I am missing."
+
+- Log-Injection Workflows: Ask the AI to "Insert strategic logging to help trace 
+the lifecycle of this specific variable," rather than asking it to "fix" the bug 
+immediately.
+
+- Verify with "Counter-Tests": Once the AI suggests a fix, ask it to write a 
+failing test case that proves the bug existed, then run the fix against it. 
+This prevents "fix-looping" where one bug is traded for another.
+
+- Cross-Reference Agents: For complex bugs, use two different models 
+(e.g., Claude and Gemini). If they disagree on the root cause, that area usually 
+requires deep human manual inspection.
+
+- For modular pre-defined rules, use multiple .md files. For example:
+    1. .claude/rules/*.md
+        a. ui-rules.md
+        b. api-conventions.md
+        c. tests.md
+
+- Use subagents for complex work, such as auditor, planner, executor, and reviewer.
+
+- Triage -> Prompt -> Verify
+
