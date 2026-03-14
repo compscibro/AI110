@@ -96,18 +96,18 @@ If you finish early or want an extra challenge, try one of these:
 - Add a "Recently added" view  
 - [x] Add sorting controls  
 - [x] Improve how Mixed songs are handled  
-- Add new features to the history view  
-- Introduce better error handling for empty playlists  
+- [ ] Add new features to the history view  
+- [ ] Introduce better error handling for empty playlists  
 - Add a new playlist category of your own design  
 
 ---
 
 ## Tips for success
 
-- You do not need to solve everything. Focus on exploring and learning.  
-- When confused, ask an AI assistant to explain the code or summarize behavior.  
-- Test the app often. Small experiments reveal useful clues.  
-- Treat surprising behavior as something worth investigating.  
-- Stay curious. The unpredictability is intentional and part of the experience.
+- [x] You do not need to solve everything. Focus on exploring and learning.  
+- [x] When confused, ask an AI assistant to explain the code or summarize behavior.  
+- [x] Test the app often. Small experiments reveal useful clues.  
+- [x] Treat surprising behavior as something worth investigating.  
+- [x] Stay curious. The unpredictability is intentional and part of the experience.
 
 When you finish, Playlist Chaos will feel more predictable, and you will have taken your first steps into AI-assisted debugging.
