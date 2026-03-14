@@ -42,3 +42,4 @@ classDiagram
     Transaction "0..*" o-- "1..*" FoodItem : contains
     Menu "1" o-- "0..*" FoodItem : holds
 ```
+
