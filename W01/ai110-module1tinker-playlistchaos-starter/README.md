@@ -92,16 +92,16 @@ Confirm that the behavior matches your expectations.
 
 If you finish early or want an extra challenge, try one of these:
 
-- Improve search behavior  
-- Add a "Recently added" view  
+- [ ] Improve search behavior  
+- [ ] Add a "Recently added" view  
 - [x] Add sorting controls  
 - [x] Improve how Mixed songs are handled  
 - [ ] Add new features to the history view  
 - [ ] Introduce better error handling for empty playlists  
-- Add a new playlist category of your own design  
+- [ ] Add a new playlist category of your own design  
 
 ---
-
+    
 ## Tips for success
 
 - [x] You do not need to solve everything. Focus on exploring and learning.  
