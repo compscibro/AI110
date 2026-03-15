@@ -42,6 +42,19 @@ if "status" not in st.session_state:
 if "history" not in st.session_state:
     st.session_state.history = []
 
+if "difficulty" not in st.session_state:
+    st.session_state.difficulty = difficulty
+
+# Reset all game state when the player switches difficulty
+if st.session_state.difficulty != difficulty:
+    st.session_state.difficulty = difficulty
+    st.session_state.secret = random.randint(low, high)
+    st.session_state.attempts = 0
+    st.session_state.score = 0
+    st.session_state.status = "playing"
+    st.session_state.history = []
+    st.rerun()
+
 st.subheader("Make a guess")
 
 # Placeholder filled after submit so it reflects the incremented attempt count

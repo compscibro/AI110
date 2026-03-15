@@ -45,3 +45,7 @@ Summary: Added input range validation — guesses outside the difficulty range a
 Date: 2026-03-15
 Files Changed: tests/test_game_logic.py
 Summary: Expanded test suite to 43 tests. Added edge cases and rare event coverage — scientific notation, multiple decimal points, leading spaces, very large numbers, boundary wins, attempt-zero scoring, and multi-guess score accumulation. All 43 tests pass.
+
+Date: 2026-03-15
+Files Changed: app.py
+Summary: Fixed game state not resetting when difficulty is changed. Added difficulty tracking in session state — switching difficulty now triggers a full reset of secret, attempts, score, status, and history.
