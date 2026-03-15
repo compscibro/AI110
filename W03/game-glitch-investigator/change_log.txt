@@ -1,0 +1,19 @@
+Date: 2026-03-14
+Files Changed: app.py
+Summary: Fixed off-by-one bug where attempts counter initialized to 1 instead of 0, causing the game to show 1 attempt used before any guess was submitted and mismatching attempt counts between the sidebar and center display.
+
+Date: 2026-03-14
+Files Changed: app.py
+Summary: Fixed backwards hints in check_guess — "Too High" now correctly says "Go LOWER!" and "Too Low" says "Go HIGHER!". Also removed a string conversion glitch that cast the secret to a string on even-numbered attempts, which caused incorrect comparisons every other guess.
+
+Date: 2026-03-14
+Files Changed: app.py
+Summary: Fixed New Game button not resetting history, score, or game status. Added resets for session_state.history, session_state.score, and session_state.status so each new game starts cleanly.
+
+Date: 2026-03-14
+Files Changed: app.py
+Summary: Fixed score display mismatch between the win/loss message and the Developer Debug Info panel. Moved the debug expander to after the submit handler so it reads the already-updated score value instead of the previous rerun's value.
+
+Date: 2026-03-14
+Files Changed: app.py, logic_utils.py
+Summary: Refactored game logic into logic_utils.py. Removed duplicate function definitions from app.py and replaced with a single import. Updated check_guess call site to handle the new single-string return value using a local hint message map. All 3 pytest tests pass.
