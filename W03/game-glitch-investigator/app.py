@@ -53,12 +53,21 @@ if st.session_state.difficulty != difficulty:
     st.session_state.score = 0
     st.session_state.status = "playing"
     st.session_state.history = []
+    st.session_state.show_new_game_msg = True
     st.rerun()
+
+if st.session_state.get("show_new_game_msg"):
+    st.session_state.show_new_game_msg = False
+    st.success("New game started.")
 
 st.subheader("Make a guess")
 
-# Placeholder filled after submit so it reflects the incremented attempt count
+# Filled immediately so it's never empty; overwritten by submit handler after incrementing
 attempts_display = st.empty()
+attempts_display.info(
+    f"Guess a number between {low} and {high}. "
+    f"Attempts left: {attempt_limit - st.session_state.attempts}"
+)
 
 with st.form("guess_form"):
     raw_guess = st.text_input(
@@ -79,6 +88,7 @@ if new_game:
     st.session_state.history = []
     st.session_state.score = 0
     st.session_state.status = "playing"
+    st.session_state.show_new_game_msg = True
     st.rerun()
 
 if st.session_state.status != "playing":
@@ -140,12 +150,6 @@ if submit:
                     f"The secret was {st.session_state.secret}. "
                     f"Score: {st.session_state.score}"
                 )
-else:
-    attempts_display.info(
-        f"Guess a number between {low} and {high}. "
-        f"Attempts left: {attempt_limit - st.session_state.attempts}"
-    )
-
 with st.expander("Developer Debug Info"):
     st.write("Secret:", st.session_state.secret)
     st.write("Attempts:", st.session_state.attempts)
