@@ -49,3 +49,7 @@ Summary: Expanded test suite to 43 tests. Added edge cases and rare event covera
 Date: 2026-03-15
 Files Changed: app.py
 Summary: Fixed game state not resetting when difficulty is changed. Added difficulty tracking in session state — switching difficulty now triggers a full reset of secret, attempts, score, status, and history.
+
+Date: 2026-03-15
+Files Changed: logic_utils.py, tests/test_game_logic.py
+Summary: Fixed fallback in get_range_for_difficulty to return (1, 50) instead of (1, 100) so unrecognized difficulties default to Normal range rather than silently behaving like Hard. Updated two affected tests.

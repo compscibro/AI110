@@ -93,7 +93,7 @@ def test_range_unknown_defaults_to_normal():
     # Any unrecognized difficulty falls back to the Normal range
     low, high = get_range_for_difficulty("Unknown")
     assert low == 1
-    assert high == 100
+    assert high == 50
 
 
 # --- update_score ---
@@ -175,7 +175,7 @@ def test_range_case_sensitive():
     # Lowercase "easy" is not a recognized difficulty — falls back to default
     low, high = get_range_for_difficulty("easy")
     assert low == 1
-    assert high == 100
+    assert high == 50
 
 def test_score_win_exactly_at_floor_boundary():
     # Attempt 9: 100 - 10*9 = 10, exactly at the floor — should not be reduced further
