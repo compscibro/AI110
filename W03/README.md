@@ -6,4 +6,4 @@ Built the core architecture for ByteBites, a campus food-ordering system, by usi
 - [x] Represented and manipulated structured data using simple Python classes and containers.
 - [x] Applied algorithmic reasoning to tasks such as sorting, filtering, and validation.
 - [x] Used UML-style diagrams to think about system structure before writing code.
-- [x] Incorporated AI-produced code and diagrams as inputs to your workflow.
+- [x] Incorporated AI-produced code and diagrams as inputs to the workflow.
