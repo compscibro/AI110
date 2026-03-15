@@ -25,3 +25,7 @@ Summary: Fixed "Attempts left" showing 1 instead of 0 on the final failed attemp
 Date: 2026-03-15
 Files Changed: logic_utils.py
 Summary: Fixed two scoring bugs in update_score. Removed the off-by-one in the win formula (attempt_number + 1 → attempt_number) so a first-attempt win correctly awards 90 points. Removed the even/odd asymmetry for Too High guesses so it consistently deducts 5 points like Too Low.
+
+Date: 2026-03-15
+Files Changed: app.py
+Summary: Wrapped the text input and submit button in st.form so pressing Enter submits the guess. New Game and Show Hint moved to a separate 2-column row outside the form.

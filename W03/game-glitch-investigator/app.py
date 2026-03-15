@@ -47,17 +47,17 @@ st.subheader("Make a guess")
 # Placeholder filled after submit so it reflects the incremented attempt count
 attempts_display = st.empty()
 
-raw_guess = st.text_input(
-    "Enter your guess:",
-    key=f"guess_input_{difficulty}"
-)
+with st.form("guess_form"):
+    raw_guess = st.text_input(
+        "Enter your guess:",
+        key=f"guess_input_{difficulty}"
+    )
+    submit = st.form_submit_button("Submit Guess 🚀")
 
-col1, col2, col3 = st.columns(3)
+col1, col2 = st.columns(2)
 with col1:
-    submit = st.button("Submit Guess 🚀")
-with col2:
     new_game = st.button("New Game 🔁")
-with col3:
+with col2:
     show_hint = st.checkbox("Show hint", value=True)
 
 if new_game:
