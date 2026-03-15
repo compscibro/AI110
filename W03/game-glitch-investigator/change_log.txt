@@ -60,11 +60,7 @@ Summary: Collapsed redundant Too High and Too Low branches in update_score into 
 
 Date: 2026-03-15
 Files Changed: app.py, logic_utils.py
-Summary: Removed dead st.success("New game started.") call that was never shown due to the immediate st.rerun() following it. Narrowed exception handling in parse_guess from except Exception to except ValueError to avoid silently swallowing unrelated errors.
-
-Date: 2026-03-15
-Files Changed: app.py
-Summary: Fixed "New game started." message never appearing. Used a session state flag to persist the message across the st.rerun() so it displays correctly on the next render.
+Summary: Fixed "New game started." message never appearing — the original st.success() call was discarded by the immediate st.rerun(). Replaced with a session state flag so the message persists across the rerun and displays correctly. Also narrowed exception handling in parse_guess from except Exception to except ValueError.
 
 Date: 2026-03-15
 Files Changed: app.py
