@@ -5,7 +5,7 @@ from logic_utils import get_range_for_difficulty, parse_guess, check_guess, upda
 st.set_page_config(page_title="Glitchy Guesser", page_icon="🎮")
 
 st.title("🎮 Game Glitch Investigator")
-st.caption("An AI-generated guessing game. Something is off.")
+st.caption("An AI-generated guessing game. Something was off. All bugs were solved and some new features were implemented by AI Engineer: Mohammed Abdur Rahman.")
 
 st.sidebar.header("Settings")
 
@@ -188,4 +188,4 @@ with st.expander("Developer Debug Info"):
     st.write("History:", st.session_state.history)
 
 st.divider()
-st.caption("Built by an AI that claims this code is production-ready.")
+st.caption("Built by an AI that claims this code is production-ready. Implemented, tested, and validated by the AI Engineer, which made this code production-ready.")
