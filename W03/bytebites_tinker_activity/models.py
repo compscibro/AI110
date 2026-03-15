@@ -68,6 +68,16 @@ class User:
         """
         self.purchase_history.append(order)
 
+    def total_spent(self) -> float:
+        """
+        Calculate the total amount spent across all past orders.
+
+        Returns:
+            The sum of all order totals, rounded to 2 decimal places.
+            Returns 0.0 if the user has no purchase history.
+        """
+        return round(sum(order.compute_total() for order in self.purchase_history), 2)
+
 
 class Order:
     """Represents a single transaction grouping selected MenuItems for a User."""
@@ -141,6 +151,47 @@ class Restaurant:
             A list of MenuItems in that category. Returns an empty list if none found.
         """
         return [item for item in self.items if item.category == category]
+
+    def filter_by_price_range(self, min_price: float, max_price: float) -> list[MenuItem]:
+        """
+        Return all menu items whose price falls within the given range (inclusive).
+
+        Args:
+            min_price: The lowest acceptable price.
+            max_price: The highest acceptable price.
+
+        Returns:
+            A list of MenuItems priced between min_price and max_price.
+        """
+        return [item for item in self.items if min_price <= item.price <= max_price]
+
+    def sort_by_price(self, reverse: bool = False) -> list[MenuItem]:
+        """
+        Return a sorted copy of the menu ordered by price.
+
+        Does not modify the original items list.
+
+        Args:
+            reverse: If True, sort descending (highest price first). Defaults to False.
+
+        Returns:
+            A new list of MenuItems sorted by price.
+        """
+        return sorted(self.items, key=lambda item: item.price, reverse=reverse)
+
+    def sort_by_popularity(self, reverse: bool = False) -> list[MenuItem]:
+        """
+        Return a sorted copy of the menu ordered by popularity rating.
+
+        Does not modify the original items list.
+
+        Args:
+            reverse: If True, sort descending (most popular first). Defaults to False.
+
+        Returns:
+            A new list of MenuItems sorted by popularity rating.
+        """
+        return sorted(self.items, key=lambda item: item.popularity_rating, reverse=reverse)
 
 
 def demo_menu_item():
