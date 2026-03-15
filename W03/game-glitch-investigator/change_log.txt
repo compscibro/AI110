@@ -57,3 +57,7 @@ Summary: Fixed fallback in get_range_for_difficulty to return (1, 50) instead of
 Date: 2026-03-15
 Files Changed: logic_utils.py
 Summary: Collapsed redundant Too High and Too Low branches in update_score into a single condition since both deduct 5 points.
+
+Date: 2026-03-15
+Files Changed: app.py, logic_utils.py
+Summary: Removed dead st.success("New game started.") call that was never shown due to the immediate st.rerun() following it. Narrowed exception handling in parse_guess from except Exception to except ValueError to avoid silently swallowing unrelated errors.

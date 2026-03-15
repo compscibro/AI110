@@ -27,7 +27,7 @@ def parse_guess(raw: str):
             value = int(float(raw))
         else:
             value = int(raw)
-    except Exception:
+    except ValueError:
         return False, None, "That is not a number."
 
     return True, value, None

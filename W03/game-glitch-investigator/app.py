@@ -79,7 +79,6 @@ if new_game:
     st.session_state.history = []
     st.session_state.score = 0
     st.session_state.status = "playing"
-    st.success("New game started.")
     st.rerun()
 
 if st.session_state.status != "playing":
