@@ -29,3 +29,11 @@ Summary: Fixed two scoring bugs in update_score. Removed the off-by-one in the w
 Date: 2026-03-15
 Files Changed: app.py
 Summary: Wrapped the text input and submit button in st.form so pressing Enter submits the guess. New Game and Show Hint moved to a separate 2-column row outside the form.
+
+Date: 2026-03-15
+Files Changed: logic_utils.py, app.py
+Summary: Updated difficulty ranges — Normal changed to 1–50, Hard changed to 1–100. Fixed New Game button to use low/high from get_range_for_difficulty so the secret respects the selected difficulty. Fixed info banner to display the actual range dynamically. Changed default difficulty from Normal to Easy.
+
+Date: 2026-03-15
+Files Changed: app.py
+Summary: Set all difficulty levels to 8 attempts so the sidebar and info banner are always in sync.
