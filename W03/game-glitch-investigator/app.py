@@ -82,11 +82,6 @@ if submit:
         f"Guess a number between 1 and 100. "
         f"Attempts left: {attempt_limit - st.session_state.attempts}"
     )
-else:
-    attempts_display.info(
-        f"Guess a number between 1 and 100. "
-        f"Attempts left: {attempt_limit - st.session_state.attempts}"
-    )
 
     ok, guess_int, err = parse_guess(raw_guess)
 
@@ -123,6 +118,11 @@ else:
                     f"The secret was {st.session_state.secret}. "
                     f"Score: {st.session_state.score}"
                 )
+else:
+    attempts_display.info(
+        f"Guess a number between 1 and 100. "
+        f"Attempts left: {attempt_limit - st.session_state.attempts}"
+    )
 
 with st.expander("Developer Debug Info"):
     st.write("Secret:", st.session_state.secret)
