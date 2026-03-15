@@ -21,3 +21,7 @@ Summary: Refactored game logic into logic_utils.py. Removed duplicate function d
 Date: 2026-03-14
 Files Changed: app.py
 Summary: Fixed "Attempts left" showing 1 instead of 0 on the final failed attempt. Replaced st.info with an st.empty() placeholder filled after the attempt increment so the count always reflects the post-submission value.
+
+Date: 2026-03-15
+Files Changed: logic_utils.py
+Summary: Fixed two scoring bugs in update_score. Removed the off-by-one in the win formula (attempt_number + 1 → attempt_number) so a first-attempt win correctly awards 90 points. Removed the even/odd asymmetry for Too High guesses so it consistently deducts 5 points like Too Low.
