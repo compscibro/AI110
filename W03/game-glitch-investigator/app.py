@@ -77,19 +77,29 @@ if st.session_state.status != "playing":
     st.stop()
 
 if submit:
-    st.session_state.attempts += 1
-    attempts_display.info(
-        f"Guess a number between {low} and {high}. "
-        f"Attempts left: {attempt_limit - st.session_state.attempts}"
-    )
-
     ok, guess_int, err = parse_guess(raw_guess)
 
     if not ok:
-        st.session_state.history.append(raw_guess)
+        # Invalid input — do not count as an attempt
+        attempts_display.info(
+            f"Guess a number between {low} and {high}. "
+            f"Attempts left: {attempt_limit - st.session_state.attempts}"
+        )
         st.error(err)
+    elif guess_int < low or guess_int > high:
+        # Out-of-range input — remind user and do not count as an attempt
+        attempts_display.info(
+            f"Guess a number between {low} and {high}. "
+            f"Attempts left: {attempt_limit - st.session_state.attempts}"
+        )
+        st.error(f"Please enter a number between {low} and {high}.")
     else:
+        st.session_state.attempts += 1
         st.session_state.history.append(guess_int)
+        attempts_display.info(
+            f"Guess a number between {low} and {high}. "
+            f"Attempts left: {attempt_limit - st.session_state.attempts}"
+        )
 
         outcome = check_guess(guess_int, st.session_state.secret)
         hint_messages = {"Win": "🎉 Correct!", "Too High": "📉 Go LOWER!", "Too Low": "📈 Go HIGHER!"}

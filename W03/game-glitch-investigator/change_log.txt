@@ -37,3 +37,11 @@ Summary: Updated difficulty ranges — Normal changed to 1–50, Hard changed to
 Date: 2026-03-15
 Files Changed: app.py
 Summary: Set all difficulty levels to 8 attempts so the sidebar and info banner are always in sync.
+
+Date: 2026-03-15
+Files Changed: app.py
+Summary: Added input range validation — guesses outside the difficulty range are rejected with an error message and do not count as an attempt. Moved the attempt increment to only fire after input passes both parse and range checks.
+
+Date: 2026-03-15
+Files Changed: tests/test_game_logic.py
+Summary: Expanded test suite to 43 tests. Added edge cases and rare event coverage — scientific notation, multiple decimal points, leading spaces, very large numbers, boundary wins, attempt-zero scoring, and multi-guess score accumulation. All 43 tests pass.
