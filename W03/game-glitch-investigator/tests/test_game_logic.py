@@ -239,3 +239,163 @@ def test_score_accumulates_across_multiple_wrong_guesses():
     score = update_score(score, "Too Low", 2)
     score = update_score(score, "Too Low", 3)
     assert score == -15
+
+
+# --- check_guess: exhaustive coverage ---
+
+def test_check_guess_one_below_secret():
+    # Guess is exactly one less than the secret
+    assert check_guess(4, 5) == "Too Low"
+
+def test_check_guess_one_above_secret():
+    # Guess is exactly one more than the secret
+    assert check_guess(6, 5) == "Too High"
+
+def test_check_guess_zero_equals_zero():
+    assert check_guess(0, 0) == "Win"
+
+def test_check_guess_negative_guess_positive_secret():
+    assert check_guess(-1, 5) == "Too Low"
+
+def test_check_guess_large_equal_numbers():
+    assert check_guess(999999, 999999) == "Win"
+
+
+# --- parse_guess: exhaustive coverage ---
+
+def test_parse_guess_leading_plus_sign():
+    # Python's int() accepts a leading "+", so "+5" is a valid guess
+    ok, value, err = parse_guess("+5")
+    assert ok is True
+    assert value == 5
+
+def test_parse_guess_just_plus_sign():
+    ok, value, err = parse_guess("+")
+    assert ok is False
+    assert err == "That is not a number."
+
+def test_parse_guess_just_minus_sign():
+    ok, value, err = parse_guess("-")
+    assert ok is False
+    assert err == "That is not a number."
+
+def test_parse_guess_trailing_dot():
+    # "1." has "." so uses float path — float("1.") = 1.0 → int 1
+    ok, value, err = parse_guess("1.")
+    assert ok is True
+    assert value == 1
+
+def test_parse_guess_leading_zeros():
+    # int("007") = 7 in Python 3 (no octal interpretation for int())
+    ok, value, err = parse_guess("007")
+    assert ok is True
+    assert value == 7
+
+def test_parse_guess_comma_thousands_separator():
+    # Commas are not valid in Python int() or float()
+    ok, value, err = parse_guess("1,000")
+    assert ok is False
+    assert err == "That is not a number."
+
+def test_parse_guess_mixed_letters_and_numbers():
+    ok, value, err = parse_guess("12abc")
+    assert ok is False
+    assert err == "That is not a number."
+
+def test_parse_guess_float_scientific_notation():
+    # "1.0e5" has "." so uses float path — float("1.0e5") = 100000.0 → int 100000
+    ok, value, err = parse_guess("1.0e5")
+    assert ok is True
+    assert value == 100000
+
+
+# --- get_range_for_difficulty: exhaustive coverage ---
+
+def test_range_empty_string():
+    low, high = get_range_for_difficulty("")
+    assert low == 1
+    assert high == 50
+
+def test_range_none_input():
+    # None does not equal any known difficulty string — falls back to Normal range
+    low, high = get_range_for_difficulty(None)
+    assert low == 1
+    assert high == 50
+
+def test_range_all_caps_easy():
+    low, high = get_range_for_difficulty("EASY")
+    assert low == 1
+    assert high == 50
+
+def test_range_all_caps_hard():
+    low, high = get_range_for_difficulty("HARD")
+    assert low == 1
+    assert high == 50
+
+def test_range_all_caps_normal():
+    low, high = get_range_for_difficulty("NORMAL")
+    assert low == 1
+    assert high == 50
+
+def test_range_lowercase_hard():
+    low, high = get_range_for_difficulty("hard")
+    assert low == 1
+    assert high == 50
+
+def test_range_lowercase_normal():
+    low, high = get_range_for_difficulty("normal")
+    assert low == 1
+    assert high == 50
+
+
+# --- update_score: all win attempt values 1–8 ---
+
+def test_score_win_second_attempt():
+    # 100 - 10 * 2 = 80
+    assert update_score(0, "Win", 2) == 80
+
+def test_score_win_third_attempt():
+    # 100 - 10 * 3 = 70
+    assert update_score(0, "Win", 3) == 70
+
+def test_score_win_fourth_attempt():
+    # 100 - 10 * 4 = 60
+    assert update_score(0, "Win", 4) == 60
+
+def test_score_win_sixth_attempt():
+    # 100 - 10 * 6 = 40
+    assert update_score(0, "Win", 6) == 40
+
+def test_score_win_seventh_attempt():
+    # 100 - 10 * 7 = 30
+    assert update_score(0, "Win", 7) == 30
+
+def test_score_win_eighth_attempt():
+    # 100 - 10 * 8 = 20 — last valid attempt before game ends
+    assert update_score(0, "Win", 8) == 20
+
+def test_score_too_high_from_zero():
+    assert update_score(0, "Too High", 1) == -5
+
+def test_score_too_low_from_zero():
+    assert update_score(0, "Too Low", 1) == -5
+
+def test_score_empty_string_outcome():
+    # Empty string is not a recognized outcome — score unchanged
+    assert update_score(50, "", 1) == 50
+
+def test_score_win_after_wrong_guesses():
+    # 3 wrong guesses (-15) then win on attempt 4 (+60) = 45
+    score = 0
+    score = update_score(score, "Too High", 1)
+    score = update_score(score, "Too Low", 2)
+    score = update_score(score, "Too High", 3)
+    score = update_score(score, "Win", 4)
+    assert score == 45
+
+def test_score_mixed_too_high_and_too_low():
+    # Alternating Too High and Too Low both deduct 5 each
+    score = 0
+    score = update_score(score, "Too High", 1)
+    score = update_score(score, "Too Low", 2)
+    assert score == -10

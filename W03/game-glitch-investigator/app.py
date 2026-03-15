@@ -26,6 +26,9 @@ low, high = get_range_for_difficulty(difficulty)
 
 st.sidebar.caption(f"Range: {low} to {high}")
 st.sidebar.caption(f"Attempts allowed: {attempt_limit}")
+# Placeholders filled after submit so they reflect the post-submission values
+score_display = st.sidebar.empty()
+attempts_display_sidebar = st.sidebar.empty()
 
 if "secret" not in st.session_state:
     st.session_state.secret = random.randint(low, high)
@@ -60,27 +63,32 @@ if st.session_state.get("show_new_game_msg"):
     st.session_state.show_new_game_msg = False
     st.success("New game started.")
 
-st.subheader("Make a guess")
+with st.container():
+    st.subheader("Make a guess")
 
-# Filled immediately so it's never empty; overwritten by submit handler after incrementing
-attempts_display = st.empty()
-attempts_display.info(
-    f"Guess a number between {low} and {high}. "
-    f"Attempts left: {attempt_limit - st.session_state.attempts}"
-)
-
-with st.form("guess_form"):
-    raw_guess = st.text_input(
-        "Enter your guess:",
-        key=f"guess_input_{difficulty}"
+    # Filled immediately so it's never empty; overwritten by submit handler after incrementing
+    attempts_display = st.empty()
+    attempts_display.info(
+        f"Guess a number between {low} and {high}. "
+        f"Attempts left: {attempt_limit - st.session_state.attempts}"
     )
-    submit = st.form_submit_button("Submit Guess 🚀")
 
-col1, col2 = st.columns(2)
-with col1:
-    new_game = st.button("New Game 🔁")
-with col2:
-    show_hint = st.checkbox("Show hint", value=True)
+    # Placeholder filled after submit so it reflects the post-submission attempt count
+    progress_bar = st.empty()
+    progress_bar.progress(min(st.session_state.attempts / attempt_limit, 1.0))
+
+    with st.form("guess_form"):
+        raw_guess = st.text_input(
+            "Enter your guess:",
+            key=f"guess_input_{difficulty}"
+        )
+        submit = st.form_submit_button("Submit Guess 🚀", disabled=st.session_state.status != "playing")
+
+    col1, col2 = st.columns(2)
+    with col1:
+        new_game = st.button("New Game 🔁")
+    with col2:
+        show_hint = st.checkbox("Show hint", value=True)
 
 if new_game:
     st.session_state.attempts = 0
@@ -150,6 +158,28 @@ if submit:
                     f"The secret was {st.session_state.secret}. "
                     f"Score: {st.session_state.score}"
                 )
+score_display.metric("Score", st.session_state.score)
+attempts_display_sidebar.metric("Attempts Used", st.session_state.attempts)
+progress_bar.progress(min(st.session_state.attempts / attempt_limit, 1.0))
+
+# Colored badges for each past guess — red: too high, blue: too low, green: win
+if st.session_state.history:
+    st.markdown("**Guess History:**")
+    badge_parts = []
+    for g in st.session_state.history:
+        outcome = check_guess(g, st.session_state.secret)
+        if outcome == "Win":
+            color = "green"
+        elif outcome == "Too High":
+            color = "#e53935"
+        else:
+            color = "#1a73e8"
+        badge_parts.append(
+            f'<span style="background-color:{color};color:white;'
+            f'padding:3px 10px;border-radius:12px;margin:2px;display:inline-block">{g}</span>'
+        )
+    st.markdown(" ".join(badge_parts), unsafe_allow_html=True)
+
 with st.expander("Developer Debug Info"):
     st.write("Secret:", st.session_state.secret)
     st.write("Attempts:", st.session_state.attempts)

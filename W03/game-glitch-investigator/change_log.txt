@@ -65,3 +65,11 @@ Summary: Fixed "New game started." message never appearing — the original st.s
 Date: 2026-03-15
 Files Changed: app.py
 Summary: Fixed empty gap in attempts banner when game is won or lost by filling the placeholder immediately on creation instead of only inside the submit handler. Also added show_new_game_msg flag to the difficulty change reset so players are notified when switching difficulty resets the game. Removed the now-redundant else block.
+
+Date: 2026-03-15
+Files Changed: app.py
+Summary: Fixed progress bar rendering one step behind — replaced direct st.progress() call with an st.empty() placeholder filled after the submit handler so the bar reflects the post-submission attempt count. Also disabled the submit button when the game is won or lost to prevent the form from accepting additional guesses.
+
+Date: 2026-03-15
+Files Changed: tests/test_game_logic.py
+Summary: Expanded test suite from 43 to 74 tests. Added exhaustive coverage for all four functions — adjacent-value and negative-guess cases for check_guess; leading plus/minus, trailing dot, leading zeros, comma separator, mixed letters, and float scientific notation for parse_guess; empty string, None, all-caps, and lowercase variants for get_range_for_difficulty; and win at every attempt value 1–8, deduction from zero, empty-string outcome, and multi-step mixed sequences for update_score. All 74 tests pass.

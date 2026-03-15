@@ -31,8 +31,14 @@ It wrote the code, ran away, and now the game is unplayable.
 
 ## 📸 Demo
 
-- [ ] [Insert a screenshot of your fixed, winning game here]
+- [x] [Insert a screenshot of your fixed, winning game here]
+- [x] <img src="tests.png" width="600"/>
+- [x] <img src="winning.png" width="600"/>
 
 ## 🚀 Stretch Features
 
-- [ ] [If you choose to complete Challenge 4, insert a screenshot of your Enhanced Game UI here]
+- [x] [If you choose to complete Challenge 4, insert a screenshot of your Enhanced Game UI here]
+   - [x] Sidebar metrics: Score and Attempts Used as prominent numbers in the sidebar.
+   - [x] Progress bar: Visual bar below the attempts banner showing how many attempts are used.
+   - [x] Colored history badges	Each past guess shown as a colored pill — red (Too High), blue (Too Low), green (Win).
+   - [x] Visual container	Groups the guess section for a cleaner layout boundary.
