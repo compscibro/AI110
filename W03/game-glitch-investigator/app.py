@@ -44,10 +44,8 @@ if "history" not in st.session_state:
 
 st.subheader("Make a guess")
 
-st.info(
-    f"Guess a number between 1 and 100. "
-    f"Attempts left: {attempt_limit - st.session_state.attempts}"
-)
+# Placeholder filled after submit so it reflects the incremented attempt count
+attempts_display = st.empty()
 
 raw_guess = st.text_input(
     "Enter your guess:",
@@ -80,6 +78,15 @@ if st.session_state.status != "playing":
 
 if submit:
     st.session_state.attempts += 1
+    attempts_display.info(
+        f"Guess a number between 1 and 100. "
+        f"Attempts left: {attempt_limit - st.session_state.attempts}"
+    )
+else:
+    attempts_display.info(
+        f"Guess a number between 1 and 100. "
+        f"Attempts left: {attempt_limit - st.session_state.attempts}"
+    )
 
     ok, guess_int, err = parse_guess(raw_guess)
 

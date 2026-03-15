@@ -17,3 +17,7 @@ Summary: Fixed score display mismatch between the win/loss message and the Devel
 Date: 2026-03-14
 Files Changed: app.py, logic_utils.py
 Summary: Refactored game logic into logic_utils.py. Removed duplicate function definitions from app.py and replaced with a single import. Updated check_guess call site to handle the new single-string return value using a local hint message map. All 3 pytest tests pass.
+
+Date: 2026-03-14
+Files Changed: app.py
+Summary: Fixed "Attempts left" showing 1 instead of 0 on the final failed attempt. Replaced st.info with an st.empty() placeholder filled after the attempt increment so the count always reflects the post-submission value.
