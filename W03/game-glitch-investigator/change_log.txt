@@ -53,3 +53,7 @@ Summary: Fixed game state not resetting when difficulty is changed. Added diffic
 Date: 2026-03-15
 Files Changed: logic_utils.py, tests/test_game_logic.py
 Summary: Fixed fallback in get_range_for_difficulty to return (1, 50) instead of (1, 100) so unrecognized difficulties default to Normal range rather than silently behaving like Hard. Updated two affected tests.
+
+Date: 2026-03-15
+Files Changed: logic_utils.py
+Summary: Collapsed redundant Too High and Too Low branches in update_score into a single condition since both deduct 5 points.
