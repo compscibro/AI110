@@ -23,6 +23,7 @@ POSITIVE_WORDS = [
     "chill",
     "relaxed",
     "amazing",
+    "hopeful",
 ]
 
 NEGATIVE_WORDS = [
@@ -36,6 +37,8 @@ NEGATIVE_WORDS = [
     "stressed",
     "hate",
     "boring",
+    "late",
+    "mid",
 ]
 
 # ---------------------------------------------------------------------
@@ -50,6 +53,16 @@ SAMPLE_POSTS = [
     "This is fine",
     "So excited for the weekend",
     "I am not happy about this",
+    "lowkey had the best day ngl 😊",
+    "I'm fine. totally fine. everything is fine 🙂",
+    "just found out i aced the exam no cap 🎉",
+    "this weather is actually killing me 💀",
+    "ughhh woke up late again but at least coffee exists ☕",
+    "idk how to feel about today honestly",
+    "I absolutely love sitting in a 3-hour meeting 😐",
+    "feeling super grateful rn, life is good 🙏",
+    "tired but we keep going 💪",
+    "today was mid but the food was fire 🔥",
 ]
 
 # Human labels for each post above.
@@ -65,6 +78,16 @@ TRUE_LABELS = [
     "neutral",   # "This is fine"
     "positive",  # "So excited for the weekend"
     "negative",  # "I am not happy about this"
+    "positive",  # "lowkey had the best day ngl 😊"
+    "negative",  # "I'm fine. totally fine. everything is fine 🙂"  — sarcasm
+    "positive",  # "just found out i aced the exam no cap 🎉"
+    "mixed",     # "this weather is actually killing me 💀"  — hyperbolic, could be playful
+    "mixed",     # "ughhh woke up late again but at least coffee exists ☕"
+    "neutral",   # "idk how to feel about today honestly"
+    "negative",  # "I absolutely love sitting in a 3-hour meeting 😐"  — sarcasm
+    "positive",  # "feeling super grateful rn, life is good 🙏"
+    "mixed",     # "tired but we keep going 💪"
+    "mixed",     # "today was mid but the food was fire 🔥"
 ]
 
 # TODO: Add 5-10 more posts and labels.
