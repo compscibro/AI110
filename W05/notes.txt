@@ -1,0 +1,11 @@
+Traditional Programming: Rules + Data = Answers (Deterministic)
+
+Machine Learning: Data + Answers = Rules
+
+The Prediction Pipeline: Input -> Representation -> Scoring or Pattern Detection -> Decision Rule -> Output
+
+Three Categories of ML:
+    Supervised Learning
+    Unsupervised Learning
+    Reinforcement Learning
+
