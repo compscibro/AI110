@@ -5,6 +5,7 @@ All times are in minutes since midnight (e.g. 480 = 8:00 AM, 1320 = 10:00 PM).
 """
 
 from dataclasses import dataclass, field
+from datetime import date, timedelta
 from enum import Enum
 from itertools import count
 
@@ -52,8 +53,10 @@ class Task:
     description: str = ""              # optional longer description of the activity
     preferred_time: int | None = None  # minutes since midnight, or None
     is_recurring: bool = False
+    recurrence: str = ""       # "daily", "weekly", or "" for non-recurring
 
     # Set automatically — not passed by the caller
+    next_due: date | None = field(default=None)
     id: int = field(default_factory=lambda: next(_id_counter))
     is_completed: bool = field(default=False)
     scheduled_start: int | None = field(default=None)
@@ -61,7 +64,7 @@ class Task:
     unscheduled_reason: str | None = field(default=None)
 
     def __post_init__(self):
-        """Validate duration is positive and preferred_time is within a valid day."""
+        """Validate duration is positive, preferred_time is within a valid day, and recurrence is a known value."""
         if self.duration <= 0:
             raise ValueError(
                 f"Task '{self.title}': duration must be positive, got {self.duration}"
@@ -69,6 +72,10 @@ class Task:
         if self.preferred_time is not None and not (0 <= self.preferred_time <= 1439):
             raise ValueError(
                 f"Task '{self.title}': preferred_time must be 0–1439, got {self.preferred_time}"
+            )
+        if self.recurrence not in ("", "daily", "weekly"):
+            raise ValueError(
+                f"Task '{self.title}': recurrence must be '', 'daily', or 'weekly', got '{self.recurrence}'"
             )
 
     def __str__(self):
@@ -84,6 +91,24 @@ class Task:
     def mark_completed(self):
         """Mark this task as completed."""
         self.is_completed = True
+
+    def clone_for_next_occurrence(self) -> "Task":
+        """Return a fresh, unscheduled copy of this task due on the next occurrence date.
+
+        Uses timedelta to compute next_due: today + 1 day for daily, + 7 days for weekly.
+        """
+        delta = timedelta(days=1) if self.recurrence == "daily" else timedelta(weeks=1)
+        return Task(
+            title=self.title,
+            duration=self.duration,
+            priority=self.priority,
+            task_type=self.task_type,
+            description=self.description,
+            preferred_time=self.preferred_time,
+            is_recurring=self.is_recurring,
+            recurrence=self.recurrence,
+            next_due=date.today() + delta,
+        )
 
     def overlaps_with(self, other: "Task") -> bool:
         """Return True if this task's scheduled interval overlaps with other's.
@@ -245,6 +270,81 @@ class Scheduler:
 
         return {"scheduled_tasks": scheduled, "unscheduled_tasks": unscheduled}
 
+    def get_tasks_sorted_by_time(self, pet: Pet) -> list[Task]:
+        """Return all tasks sorted by preferred_time ascending; tasks with no preference sort last."""
+        return sorted(
+            pet.tasks,
+            key=lambda t: t.preferred_time if t.preferred_time is not None else float("inf"),
+        )
+
+    def filter_by_type(self, pet: Pet, task_type: TaskType) -> list[Task]:
+        """Return tasks matching a specific TaskType."""
+        return [t for t in pet.tasks if t.task_type == task_type]
+
+    def filter_by_status(self, pet: Pet, completed: bool = False) -> list[Task]:
+        """Return tasks filtered by completion status."""
+        return [t for t in pet.tasks if t.is_completed == completed]
+
+    def get_recurring_tasks(self, pet: Pet) -> list[Task]:
+        """Return all tasks marked as recurring."""
+        return [t for t in pet.tasks if t.is_recurring]
+
+    def detect_conflicts(self, pet: Pet) -> list[tuple]:
+        """Return pairs of tasks whose preferred_time intervals overlap before scheduling.
+
+        Useful for warning the user upfront about tasks that will need to be shifted.
+        Only compares tasks that have a preferred_time set.
+        """
+        timed = [t for t in pet.tasks if t.preferred_time is not None]
+        conflicts = []
+        for i, a in enumerate(timed):
+            for b in timed[i + 1:]:
+                a_end = a.preferred_time + a.duration
+                b_end = b.preferred_time + b.duration
+                if a.preferred_time < b_end and b.preferred_time < a_end:
+                    conflicts.append((a, b))
+        return conflicts
+
+    def detect_schedule_conflicts(self, result: dict) -> list[str]:
+        """Post-schedule sanity check: return warnings for any overlapping scheduled tasks.
+
+        The greedy algorithm guarantees no overlaps within one pet's schedule,
+        but this makes that guarantee explicit and testable.
+        """
+        warnings = []
+        scheduled = result["scheduled_tasks"]
+        for i, a in enumerate(scheduled):
+            for b in scheduled[i + 1:]:
+                if a.overlaps_with(b):
+                    warnings.append(
+                        f"⚠ Conflict: '{a.title}' ({_minutes_to_time(a.scheduled_start)}–"
+                        f"{_minutes_to_time(a.scheduled_end)}) overlaps "
+                        f"'{b.title}' ({_minutes_to_time(b.scheduled_start)}–"
+                        f"{_minutes_to_time(b.scheduled_end)})"
+                    )
+        return warnings
+
+    def detect_cross_pet_conflicts(self, full_result: dict) -> list[str]:
+        """Warn when scheduled tasks across different pets overlap in the final schedule.
+
+        Useful when the owner must be present for both tasks simultaneously —
+        e.g. walking one pet while feeding another at the same time.
+        """
+        warnings = []
+        pet_names = list(full_result.keys())
+        for i, pet_a in enumerate(pet_names):
+            for pet_b in pet_names[i + 1:]:
+                for a in full_result[pet_a]["scheduled_tasks"]:
+                    for b in full_result[pet_b]["scheduled_tasks"]:
+                        if a.overlaps_with(b):
+                            warnings.append(
+                                f"⚠ Cross-pet: [{pet_a}] '{a.title}' "
+                                f"({_minutes_to_time(a.scheduled_start)}–{_minutes_to_time(a.scheduled_end)}) "
+                                f"overlaps [{pet_b}] '{b.title}' "
+                                f"({_minutes_to_time(b.scheduled_start)}–{_minutes_to_time(b.scheduled_end)})"
+                            )
+        return warnings
+
     def build_full_schedule(self, owner: Owner) -> dict:
         """Build a daily schedule for every pet the owner has.
 
@@ -259,12 +359,18 @@ class Scheduler:
     def mark_task_completed(self, owner: Owner, task_id: int) -> bool:
         """Find a task by ID across all of the owner's pets and mark it complete.
 
+        If the task is recurring, automatically adds a new instance to the same
+        pet using clone_for_next_occurrence() with next_due computed via timedelta.
+
         Returns True if the task was found and marked, False if not found.
         """
-        for task in owner.get_all_tasks():
-            if task.id == task_id:
-                task.mark_completed()
-                return True
+        for pet in owner.pets:
+            for task in pet.tasks:
+                if task.id == task_id:
+                    task.mark_completed()
+                    if task.is_recurring and task.recurrence:
+                        pet.add_task(task.clone_for_next_occurrence())
+                    return True
         return False
 
     def _find_slot(

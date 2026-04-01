@@ -21,13 +21,11 @@ Several refinements were made after reviewing the initial skeleton:
 
 **a. Constraints and priorities**
 
-- What constraints does your scheduler consider (for example: time, priority, preferences)?
-- How did you decide which constraints mattered most?
+The scheduler considers three constraints: the owner's availability window (`available_start`–`available_end`), task priority (HIGH/MEDIUM/LOW), and preferred time. Priority was ranked first because missing a HIGH task like medication is worse than missing a LOW task like grooming. Preferred time is treated as a lower bound — respected when the slot is free, shifted forward when it is not.
 
 **b. Tradeoffs**
 
-- Describe one tradeoff your scheduler makes.
-- Why is that tradeoff reasonable for this scenario?
+The scheduler only searches forward from `preferred_time` — it never tries an earlier slot. If a task preferred at 1:30 PM cannot fit there, it shifts to 1:31 PM even if 7:45 AM is free. This is a reasonable tradeoff: owners generally want tasks at or after their preferred time (feeding at 7 AM when 8 AM was requested would be surprising), and backward search would add complexity with little practical benefit for a daily pet care schedule.
 
 ---
 

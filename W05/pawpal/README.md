@@ -22,6 +22,17 @@ Your final app should:
 - Display the plan clearly (and ideally explain the reasoning)
 - Include tests for the most important scheduling behaviors
 
+## Smarter Scheduling
+
+The scheduler goes beyond a simple list to give the owner a smarter daily plan:
+
+- **Sorting** — tasks are displayed in preferred-time order regardless of the order they were added, and scheduled by priority (HIGH first) so critical tasks like medication always claim their slot first.
+- **Filtering** — tasks can be filtered by `TaskType` (e.g. show only FEEDING tasks) or by completion status (pending vs. done).
+- **Recurring task automation** — marking a recurring task complete automatically clones it with a `next_due` date (today + 1 day for daily, + 7 days for weekly), so the owner never has to re-enter it.
+- **Conflict detection** — the scheduler warns about two kinds of conflicts before and after scheduling:
+  - *Pre-schedule*: tasks whose `preferred_time` intervals overlap, flagging slots that will need to shift.
+  - *Post-schedule / cross-pet*: scheduled tasks that end up overlapping, including tasks across different pets that require the owner to be in two places at once.
+
 ## Getting started
 
 ### Setup
