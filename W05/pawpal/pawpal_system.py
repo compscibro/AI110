@@ -35,6 +35,12 @@ class TaskType(Enum):
 _id_counter = count(start=1)
 
 
+def _reset_id_counter():
+    """Reset the global task ID counter. Intended for use in tests only."""
+    global _id_counter
+    _id_counter = count(start=1)
+
+
 @dataclass
 class Task:
     """A single pet care task."""
@@ -43,6 +49,7 @@ class Task:
     duration: int                      # minutes
     priority: Priority
     task_type: TaskType
+    description: str = ""              # optional longer description of the activity
     preferred_time: int | None = None  # minutes since midnight, or None
     is_recurring: bool = False
 
@@ -54,6 +61,7 @@ class Task:
     unscheduled_reason: str | None = field(default=None)
 
     def __post_init__(self):
+        """Validate duration is positive and preferred_time is within a valid day."""
         if self.duration <= 0:
             raise ValueError(
                 f"Task '{self.title}': duration must be positive, got {self.duration}"
@@ -64,6 +72,7 @@ class Task:
             )
 
     def __str__(self):
+        """Return a human-readable summary of the task for CLI debugging."""
         status = "done" if self.is_completed else "pending"
         time_info = (
             _minutes_to_time(self.scheduled_start)
@@ -73,6 +82,7 @@ class Task:
         return f"[{self.priority.name}] {self.title} ({self.duration} min) — {time_info} [{status}]"
 
     def mark_completed(self):
+        """Mark this task as completed."""
         self.is_completed = True
 
     def overlaps_with(self, other: "Task") -> bool:
@@ -105,6 +115,7 @@ class Pet:
     tasks: list[Task] = field(default_factory=list)
 
     def add_task(self, task: Task):
+        """Add a task to this pet's task list."""
         self.tasks.append(task)
 
     def remove_task(self, task_id: int):
@@ -130,6 +141,7 @@ class Owner:
     pets: list[Pet] = field(default_factory=list)
 
     def __post_init__(self):
+        """Validate that the availability window is within a real day and start is before end."""
         for val, label in [
             (self.available_start, "available_start"),
             (self.available_end, "available_end"),
@@ -144,9 +156,11 @@ class Owner:
             )
 
     def add_pet(self, pet: Pet):
+        """Add a pet to this owner's list."""
         self.pets.append(pet)
 
     def total_available_minutes(self) -> int:
+        """Return the total number of minutes in the owner's availability window."""
         return self.available_end - self.available_start
 
     def get_all_tasks(self) -> list[Task]:
@@ -195,6 +209,8 @@ class Scheduler:
             ),
         )
 
+        # Each Task is mutated in place (scheduled_start/end set here).
+        # Do not share Task objects across multiple pets — a second call would overwrite them.
         occupied: list[tuple[int, int]] = []  # (start, end) of placed tasks, kept sorted
         scheduled: list[Task] = []
         unscheduled: list[Task] = []
@@ -229,6 +245,28 @@ class Scheduler:
 
         return {"scheduled_tasks": scheduled, "unscheduled_tasks": unscheduled}
 
+    def build_full_schedule(self, owner: Owner) -> dict:
+        """Build a daily schedule for every pet the owner has.
+
+        Returns a dict keyed by pet name, each value being the result of build_schedule.
+        """
+        return {pet.name: self.build_schedule(owner, pet) for pet in owner.pets}
+
+    def get_pending_tasks(self, pet: Pet) -> list[Task]:
+        """Return all incomplete tasks for a pet, sorted by priority."""
+        return [t for t in pet.get_tasks_by_priority() if not t.is_completed]
+
+    def mark_task_completed(self, owner: Owner, task_id: int) -> bool:
+        """Find a task by ID across all of the owner's pets and mark it complete.
+
+        Returns True if the task was found and marked, False if not found.
+        """
+        for task in owner.get_all_tasks():
+            if task.id == task_id:
+                task.mark_completed()
+                return True
+        return False
+
     def _find_slot(
         self,
         occupied: list[tuple[int, int]],
@@ -245,6 +283,7 @@ class Scheduler:
         if not occupied:
             return search_from if search_from + duration <= available_end else None
 
+        # O(n²) over occupied intervals — acceptable for a small daily task list
         candidate = search_from
         while candidate + duration <= available_end:
             conflicts = [
@@ -278,8 +317,14 @@ def display_schedule(result: dict) -> str:
         start = _minutes_to_time(task.scheduled_start)
         end = _minutes_to_time(task.scheduled_end)
         recur = " (recurring)" if task.is_recurring else ""
+        # Note when the task was placed later than the owner requested
+        shifted = (
+            f" (moved from {_minutes_to_time(task.preferred_time)})"
+            if task.preferred_time is not None and task.scheduled_start != task.preferred_time
+            else ""
+        )
         lines.append(
-            f"  {start} - {end}  [{task.task_type.value.upper()}] {task.title}{recur}"
+            f"  {start} - {end}  [{task.task_type.value.upper()}] {task.title}{recur}{shifted}"
         )
 
     if not result["scheduled_tasks"]:

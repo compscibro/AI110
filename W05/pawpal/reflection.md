@@ -4,13 +4,16 @@
 
 **a. Initial design**
 
-- Briefly describe your initial UML design.
-- What classes did you include, and what responsibilities did you assign to each?
+The design uses four classes and two enumerations. `Task` holds the details of a single care activity (duration, priority, type, preferred time) and handles overlap checks via `overlaps_with()`. `Pet` owns a list of tasks and manages adding, removing, and sorting them. `Owner` stores the owner's name and daily availability window and owns a list of pets. `Scheduler` is a stateless service — `build_schedule(owner, pet)` applies a greedy interval algorithm and returns scheduled and unscheduled tasks. `Priority` and `TaskType` are enums that enforce type-safe values across the system.
 
 **b. Design changes**
 
-- Did your design change during implementation?
-- If yes, describe at least one change and why you made it.
+Several refinements were made after reviewing the initial skeleton:
+
+- **Dropped a `Schedule` class** in favour of `Scheduler.build_schedule()` returning a plain dict. A dedicated class added no real behavior for this scope and would have been an extra layer to maintain.
+- **Added `id`, `is_completed`, `scheduled_end`, and `unscheduled_reason` to `Task`** after review. `id` makes `remove_task` safe when titles collide; `scheduled_end` avoids recalculating it in `overlaps_with` and display helpers; `unscheduled_reason` gives the UI a clear explanation of why a task was dropped.
+- **Added `_reset_id_counter()`** as a module-level utility so tests can reset the global ID counter between runs without producing fragile assertions tied to specific IDs.
+- **Updated `display_schedule`** to append a `(moved from X:XX)` note when a task is placed later than its preferred time, making the scheduler's decisions transparent to the user.
 
 ---
 
