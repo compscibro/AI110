@@ -1,19 +1,19 @@
-id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness
-1,Sunrise City,Neon Echo,pop,happy,0.82,118,0.84,0.79,0.18
-2,Midnight Coding,LoRoom,lofi,chill,0.42,78,0.56,0.62,0.71
-3,Storm Runner,Voltline,rock,intense,0.91,152,0.48,0.66,0.10
-4,Library Rain,Paper Lanterns,lofi,chill,0.35,72,0.60,0.58,0.86
-5,Gym Hero,Max Pulse,pop,intense,0.93,132,0.77,0.88,0.05
-6,Spacewalk Thoughts,Orbit Bloom,ambient,chill,0.28,60,0.65,0.41,0.92
-7,Coffee Shop Stories,Slow Stereo,jazz,relaxed,0.37,90,0.71,0.54,0.89
-8,Night Drive Loop,Neon Echo,synthwave,moody,0.75,110,0.49,0.73,0.22
-9,Focus Flow,LoRoom,lofi,focused,0.40,80,0.59,0.60,0.78
-10,Rooftop Lights,Indigo Parade,indie pop,happy,0.76,124,0.81,0.82,0.35
-11,Broken Crown,Verse Zero,hip-hop,sad,0.65,95,0.22,0.70,0.15
-12,Velvet Hours,Sable June,r&b,romantic,0.55,85,0.78,0.72,0.40
-13,Morning Sonata,Clara Voss,classical,peaceful,0.20,58,0.72,0.25,0.97
-14,Bass Drop Festival,HYPR,edm,energetic,0.96,140,0.70,0.94,0.02
-15,Dusty Road Home,The Hollow Pines,country,nostalgic,0.45,96,0.63,0.55,0.75
-16,Iron Storm,Vortex Null,metal,angry,0.97,168,0.30,0.52,0.04
-17,Wildflower Lullaby,Fern & Glass,folk,melancholic,0.30,68,0.38,0.42,0.91
-18,Sun and Riddim,Coastline Dub,reggae,uplifting,0.58,88,0.85,0.78,0.52
+id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness,popularity,release_decade,instrumentalness,speechiness,mood_tags
+1,Sunrise City,Neon Echo,pop,happy,0.82,118,0.84,0.79,0.18,72,2020,0.10,0.08,"happy,uplifting,energetic"
+2,Midnight Coding,LoRoom,lofi,chill,0.42,78,0.56,0.62,0.71,61,2020,0.82,0.04,"chill,focused,relaxed"
+3,Storm Runner,Voltline,rock,intense,0.91,152,0.48,0.66,0.10,55,2010,0.15,0.06,"intense,angry,energetic"
+4,Library Rain,Paper Lanterns,lofi,chill,0.35,72,0.60,0.58,0.86,58,2020,0.88,0.03,"chill,peaceful,melancholic"
+5,Gym Hero,Max Pulse,pop,intense,0.93,132,0.77,0.88,0.05,80,2020,0.05,0.12,"intense,energetic,angry"
+6,Spacewalk Thoughts,Orbit Bloom,ambient,chill,0.28,60,0.65,0.41,0.92,44,2010,0.93,0.03,"chill,peaceful,relaxed"
+7,Coffee Shop Stories,Slow Stereo,jazz,relaxed,0.37,90,0.71,0.54,0.89,49,2010,0.76,0.05,"relaxed,romantic,nostalgic"
+8,Night Drive Loop,Neon Echo,synthwave,moody,0.75,110,0.49,0.73,0.22,52,2020,0.70,0.04,"moody,nostalgic,melancholic"
+9,Focus Flow,LoRoom,lofi,focused,0.40,80,0.59,0.60,0.78,63,2020,0.85,0.03,"focused,chill,relaxed"
+10,Rooftop Lights,Indigo Parade,indie pop,happy,0.76,124,0.81,0.82,0.35,67,2020,0.12,0.09,"happy,uplifting,romantic"
+11,Broken Crown,Verse Zero,hip-hop,sad,0.65,95,0.22,0.70,0.15,71,2020,0.08,0.28,"sad,melancholic,moody"
+12,Velvet Hours,Sable June,r&b,romantic,0.55,85,0.78,0.72,0.40,65,2020,0.20,0.10,"romantic,relaxed,moody"
+13,Morning Sonata,Clara Voss,classical,peaceful,0.20,58,0.72,0.25,0.97,41,2000,0.96,0.04,"peaceful,relaxed,melancholic"
+14,Bass Drop Festival,HYPR,edm,energetic,0.96,140,0.70,0.94,0.02,78,2020,0.55,0.06,"energetic,intense,happy"
+15,Dusty Road Home,The Hollow Pines,country,nostalgic,0.45,96,0.63,0.55,0.75,48,2010,0.25,0.08,"nostalgic,melancholic,relaxed"
+16,Iron Storm,Vortex Null,metal,angry,0.97,168,0.30,0.52,0.04,53,2010,0.18,0.06,"angry,intense,energetic"
+17,Wildflower Lullaby,Fern & Glass,folk,melancholic,0.30,68,0.38,0.42,0.91,39,2010,0.60,0.07,"melancholic,sad,peaceful"
+18,Sun and Riddim,Coastline Dub,reggae,uplifting,0.58,88,0.85,0.78,0.52,50,2020,0.30,0.09,"uplifting,happy,relaxed"

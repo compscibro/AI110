@@ -82,48 +82,196 @@ recommend_songs() →  top-k (song, score, explanation) tuples
 
 ## Sample Output
 
-Running `python src/main.py` with the default `pop/happy` profile produces:
+Running `python src/main.py` executes all six profiles — three standard and three adversarial edge cases:
+
+### Standard Profiles
 
 ```
 Loaded songs: 18
 
-============================================================
-  Profile : pop/happy
-  Genre   : pop
-  Mood    : happy
-  Energy  : 0.8
-============================================================
+==============================================================
+  Profile : High-Energy Pop
+  Genre   : pop  |  Mood: happy  |  Energy: 0.85
+==============================================================
 
   #1  Sunrise City — Neon Echo
-       Score : 3.98 / 4.00
-       Genre : pop  |  Mood: happy  |  Energy: 0.82
+       Score : 3.97 / 4.00  |  Genre: pop  |  Mood: happy
        • genre match: pop (+2.0)
        • mood match: happy (+1.0)
-       • energy similarity: 0.98 (song 0.82 vs target 0.80)
+       • energy similarity: 0.97 (song 0.82 vs target 0.85)
 
   #2  Gym Hero — Max Pulse
-       Score : 2.87 / 4.00
-       Genre : pop  |  Mood: intense  |  Energy: 0.93
+       Score : 2.92 / 4.00  |  Genre: pop  |  Mood: intense
        • genre match: pop (+2.0)
-       • energy similarity: 0.87 (song 0.93 vs target 0.80)
+       • energy similarity: 0.92 (song 0.93 vs target 0.85)
 
   #3  Rooftop Lights — Indigo Parade
-       Score : 1.96 / 4.00
-       Genre : indie pop  |  Mood: happy  |  Energy: 0.76
+       Score : 1.91 / 4.00  |  Genre: indie pop  |  Mood: happy
        • mood match: happy (+1.0)
-       • energy similarity: 0.96 (song 0.76 vs target 0.80)
+       • energy similarity: 0.91 (song 0.76 vs target 0.85)
 
-  #4  Night Drive Loop — Neon Echo
-       Score : 0.95 / 4.00
-       Genre : synthwave  |  Mood: moody  |  Energy: 0.75
-       • energy similarity: 0.95 (song 0.75 vs target 0.80)
+  #4  Storm Runner — Voltline
+       Score : 0.94 / 4.00  |  Genre: rock  |  Mood: intense
+       • energy similarity: 0.94 (song 0.91 vs target 0.85)
 
-  #5  Storm Runner — Voltline
-       Score : 0.89 / 4.00
-       Genre : rock  |  Mood: intense  |  Energy: 0.91
-       • energy similarity: 0.89 (song 0.91 vs target 0.80)
+  #5  Night Drive Loop — Neon Echo
+       Score : 0.90 / 4.00  |  Genre: synthwave  |  Mood: moody
+       • energy similarity: 0.90 (song 0.75 vs target 0.85)
 
-------------------------------------------------------------
+--------------------------------------------------------------
+
+==============================================================
+  Profile : Chill Lofi
+  Genre   : lofi  |  Mood: chill  |  Energy: 0.38
+==============================================================
+
+  #1  Library Rain — Paper Lanterns
+       Score : 3.97 / 4.00  |  Genre: lofi  |  Mood: chill
+       • genre match: lofi (+2.0)
+       • mood match: chill (+1.0)
+       • energy similarity: 0.97 (song 0.35 vs target 0.38)
+
+  #2  Midnight Coding — LoRoom
+       Score : 3.96 / 4.00  |  Genre: lofi  |  Mood: chill
+       • genre match: lofi (+2.0)
+       • mood match: chill (+1.0)
+       • energy similarity: 0.96 (song 0.42 vs target 0.38)
+
+  #3  Focus Flow — LoRoom
+       Score : 2.98 / 4.00  |  Genre: lofi  |  Mood: focused
+       • genre match: lofi (+2.0)
+       • energy similarity: 0.98 (song 0.40 vs target 0.38)
+
+  #4  Spacewalk Thoughts — Orbit Bloom
+       Score : 1.90 / 4.00  |  Genre: ambient  |  Mood: chill
+       • mood match: chill (+1.0)
+       • energy similarity: 0.90 (song 0.28 vs target 0.38)
+
+  #5  Coffee Shop Stories — Slow Stereo
+       Score : 0.99 / 4.00  |  Genre: jazz  |  Mood: relaxed
+       • energy similarity: 0.99 (song 0.37 vs target 0.38)
+
+--------------------------------------------------------------
+
+==============================================================
+  Profile : Deep Intense Rock
+  Genre   : rock  |  Mood: intense  |  Energy: 0.92
+==============================================================
+
+  #1  Storm Runner — Voltline
+       Score : 3.99 / 4.00  |  Genre: rock  |  Mood: intense
+       • genre match: rock (+2.0)
+       • mood match: intense (+1.0)
+       • energy similarity: 0.99 (song 0.91 vs target 0.92)
+
+  #2  Gym Hero — Max Pulse
+       Score : 1.99 / 4.00  |  Genre: pop  |  Mood: intense
+       • mood match: intense (+1.0)
+       • energy similarity: 0.99 (song 0.93 vs target 0.92)
+
+  #3  Bass Drop Festival — HYPR
+       Score : 0.96 / 4.00  |  Genre: edm  |  Mood: energetic
+       • energy similarity: 0.96 (song 0.96 vs target 0.92)
+
+  #4  Iron Storm — Vortex Null
+       Score : 0.95 / 4.00  |  Genre: metal  |  Mood: angry
+       • energy similarity: 0.95 (song 0.97 vs target 0.92)
+
+  #5  Sunrise City — Neon Echo
+       Score : 0.90 / 4.00  |  Genre: pop  |  Mood: happy
+       • energy similarity: 0.90 (song 0.82 vs target 0.92)
+
+--------------------------------------------------------------
+```
+
+### Adversarial / Edge Case Profiles
+
+```
+==============================================================
+  Profile : Conflicting: sad + high energy
+  Genre   : hip-hop  |  Mood: sad  |  Energy: 0.9
+==============================================================
+
+  #1  Broken Crown — Verse Zero
+       Score : 3.75 / 4.00  |  Genre: hip-hop  |  Mood: sad
+       • genre match: hip-hop (+2.0)
+       • mood match: sad (+1.0)
+       • energy similarity: 0.75 (song 0.65 vs target 0.90)
+
+  #2  Storm Runner — Voltline
+       Score : 0.99 / 4.00  |  Genre: rock  |  Mood: intense
+       • energy similarity: 0.99 (song 0.91 vs target 0.90)
+
+  #3  Gym Hero — Max Pulse
+       Score : 0.97 / 4.00  |  Genre: pop  |  Mood: intense
+       • energy similarity: 0.97 (song 0.93 vs target 0.90)
+
+  #4  Bass Drop Festival — HYPR
+       Score : 0.94 / 4.00  |  Genre: edm  |  Mood: energetic
+       • energy similarity: 0.94 (song 0.96 vs target 0.90)
+
+  #5  Iron Storm — Vortex Null
+       Score : 0.93 / 4.00  |  Genre: metal  |  Mood: angry
+       • energy similarity: 0.93 (song 0.97 vs target 0.90)
+
+--------------------------------------------------------------
+
+==============================================================
+  Profile : Ghost genre (no match)
+  Genre   : bossa nova  |  Mood: relaxed  |  Energy: 0.45
+==============================================================
+
+  #1  Coffee Shop Stories — Slow Stereo
+       Score : 1.92 / 4.00  |  Genre: jazz  |  Mood: relaxed
+       • mood match: relaxed (+1.0)
+       • energy similarity: 0.92 (song 0.37 vs target 0.45)
+
+  #2  Dusty Road Home — The Hollow Pines
+       Score : 1.00 / 4.00  |  Genre: country  |  Mood: nostalgic
+       • energy similarity: 1.00 (song 0.45 vs target 0.45)
+
+  #3  Midnight Coding — LoRoom
+       Score : 0.97 / 4.00  |  Genre: lofi  |  Mood: chill
+       • energy similarity: 0.97 (song 0.42 vs target 0.45)
+
+  #4  Focus Flow — LoRoom
+       Score : 0.95 / 4.00  |  Genre: lofi  |  Mood: focused
+       • energy similarity: 0.95 (song 0.40 vs target 0.45)
+
+  #5  Library Rain — Paper Lanterns
+       Score : 0.90 / 4.00  |  Genre: lofi  |  Mood: chill
+       • energy similarity: 0.90 (song 0.35 vs target 0.45)
+
+--------------------------------------------------------------
+
+==============================================================
+  Profile : Extreme low energy
+  Genre   : ambient  |  Mood: peaceful  |  Energy: 0.01
+==============================================================
+
+  #1  Spacewalk Thoughts — Orbit Bloom
+       Score : 2.73 / 4.00  |  Genre: ambient  |  Mood: chill
+       • genre match: ambient (+2.0)
+       • energy similarity: 0.73 (song 0.28 vs target 0.01)
+
+  #2  Morning Sonata — Clara Voss
+       Score : 1.81 / 4.00  |  Genre: classical  |  Mood: peaceful
+       • mood match: peaceful (+1.0)
+       • energy similarity: 0.81 (song 0.20 vs target 0.01)
+
+  #3  Wildflower Lullaby — Fern & Glass
+       Score : 0.71 / 4.00  |  Genre: folk  |  Mood: melancholic
+       • energy similarity: 0.71 (song 0.30 vs target 0.01)
+
+  #4  Library Rain — Paper Lanterns
+       Score : 0.66 / 4.00  |  Genre: lofi  |  Mood: chill
+       • energy similarity: 0.66 (song 0.35 vs target 0.01)
+
+  #5  Coffee Shop Stories — Slow Stereo
+       Score : 0.64 / 4.00  |  Genre: jazz  |  Mood: relaxed
+       • energy similarity: 0.64 (song 0.37 vs target 0.01)
+
+--------------------------------------------------------------
 ```
 
 ---
